@@ -1,0 +1,27 @@
+# EDA Ignored Files - Open Analog Standard
+*.raw
+*.out
+*.log
+*.vcd
+*.fsdb
+
+# Layout/Extraction intermediate files
+*.ext
+*.sim
+*.nodes
+*.mag.bkp*
+*.drc
+*.lvs.report
+
+# Folder Specifics - Ignore contents but keep folder
+/artifacts/*
+!/artifacts/.keep
+/sim/results/*
+!/sim/results/.keep
+/verify/reports/*
+!/verify/reports/.keep
+
+# System
+.DS_Store
+Thumbs.db
+__pycache__/
