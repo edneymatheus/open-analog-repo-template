@@ -1,0 +1,42 @@
+* Testbench: Smoke Test (Inverter)
+* Path: sim/tb/tb_smoke.spice
+
+* 1. Includes (Navigating the hierarchy)
+.include ../../ip/common/my_inverter.spice
+
+2. Parameters and Models
+.model nmos nmos level=1
+.model pmos pmos level=1
+.param VDD_VAL=1.8
+
+* 3. Test Netlist
+Vsupply vdd 0 DC {VDD_VAL}
+Vin     in  0 PULSE(0 {VDD_VAL} 1n 100p 100p 10n 20n)
+
+* Inverter Instance (DUT)
+X1 in out vdd 0 my_inverter
+
+* 4. Simulation Commands
+.control
+    * Saves the results to the correct folder (cleanup)
+    set wr_vecnames
+    set wr_singlescale
+    
+    tran 10p 40n
+    
+    echo "Simulation completed. Checking results..."
+    
+    * Automatic measurement (Pass/Fail check)
+    meas tran t_delay trig v(in) val=0.9 rise=1 targ v(out) val=0.9 fall=1
+    
+    if t_delay > 0
+        echo "✅ TEST PASS: Inverter is switching! Delay =" $&t_delay
+    else
+        echo "❌ TEST FAIL: Inverter output stuck."
+    end
+
+    * Writes the raw file to the results folder (not the root directory!)
+    write ../results/smoke_test.raw v(in) v(out)
+.endc
+
+.end

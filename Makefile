@@ -1,27 +1,33 @@
-# Open Analog Makefile Standard v0.1
-# Targets: help, smoke, clean, tapeout
+# Open Analog Repo Template v0.1 - Functional Version
+
+# Configuração de Ferramentas
+SPICE = ngspice
+SPICE_FLAGS = -b
+
+# Caminhos
+TB_DIR = sim/tb
+RES_DIR = sim/results
 
 .PHONY: help smoke clean tapeout
 
 help:
 	@echo "Open Analog Repo Template v0.1"
 	@echo "------------------------------"
-	@echo "  make smoke   -> Validate setup with a dummy test"
-	@echo "  make clean   -> Remove temporary files in artifacts/ and sim/results/"
-	@echo "  make tapeout -> Assemble final GDS/Docs in tapeout/delivery/"
+	@echo "  make smoke   -> Simula o Inversor (Hello World) para validar o ambiente"
+	@echo "  make clean   -> Limpa arquivos temporários (raw, log, etc)"
+	@echo "  make tapeout -> Gera o pacote final (Placeholder)"
 
 smoke:
-	@echo "🚀 Running Smoke Test..."
-	@echo "   Checking environment..."
-	@if [ -f "env/env.sh" ]; then echo "✅ env.sh found"; else echo "❌ env.sh missing"; fi
-	@echo "✅ Smoke Test Passed: Repo is healthy."
+	@echo "🚀 Iniciando Smoke Test..."
+	@mkdir -p $(RES_DIR)
+	@$(SPICE) $(SPICE_FLAGS) $(TB_DIR)/tb_smoke.spice
+	@echo "✅ Smoke Test Finalizado. Resultados em $(RES_DIR)/smoke_test.raw"
 
 clean:
-	@echo "🧹 Cleaning temporary files..."
-	rm -rf artifacts/* sim/results/* verify/reports/*
-	@echo "✨ Workspace Cleaned."
+	@echo "🧹 Limpando workspace..."
+	rm -f artifacts/* rm -f $(RES_DIR)/*.raw $(RES_DIR)/*.out
+	@echo "✨ Tudo limpo."
 
 tapeout:
-	@echo "📦 Assembling Tapeout Package..."
-	@echo "⚠️  Functionality to be implemented in v0.2"
-	@echo "✅ Checks complete."
+	@echo "📦 Montando pacote de entrega..."
+	@echo "⚠️  Funcionalidade prevista para v0.2"
