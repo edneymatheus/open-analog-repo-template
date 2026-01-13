@@ -1,0 +1,5 @@
+name	type	direction	domain	description	layer_hint	notes
+VDD	power	in	1V8	Main Core Supply	TopMetal	Max current 10mA
+VSS	power	in	0V	Ground	TopMetal	
+CLK_IN	signal	in	1V8	System Clock 10MHz	Metal3	Shielding required
+DATA_OUT	signal	out	1V8	Serial Output	Metal3	
