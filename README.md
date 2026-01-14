@@ -44,6 +44,9 @@ open-analog-repo/
 │   ├── run/          #   -> Run scripts / helpers
 │   └── results/      #   -> [IGNORED] Simulation waveforms & logs (.raw, .log)
 ├── verify/           # Physical Verification (DRC, LVS, PEX)
+│   ├── drc/          
+│   ├── lvs/          
+│   ├── pex/          
 │   ├── run/          #   -> Entry-point scripts (stubs)
 │   └── reports/      #   -> [IGNORED] Intermediate verification logs
 └── tapeout/          # Versioned Delivery Packages (GDS + Reports + Docs)
