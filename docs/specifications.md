@@ -1,24 +1,29 @@
-# Specifications (Template)
+# Specifications (Min / Typ / Max)
 
-> This file is the single reference for electrical targets (Min/Typ/Max).
-> Fill it before packaging a tapeout candidate.
+This file is the living spec reference for the project.
 
-## Block / Chip
-- Name:
-- PDK: (Sky130 / IHP SG13G2 / other)
-- Supply domains:
+## 1) Overview
+- Project: <name>
+- PDK: <sky130A / ihp_sg13g2 / ...>
+- Supply: <VDD>
+- Temperature range: <e.g., -40C to 125C>
 
-## Electrical Targets (Min / Typ / Max)
-| Parameter | Min | Typ | Max | Unit | Notes |
-|---|---:|---:|---:|---|---|
-| VDD |  |  |  | V |  |
-| IDD |  |  |  | mA |  |
-| BW |  |  |  | Hz |  |
-| Gain |  |  |  | dB |  |
-| Noise |  |  |  |  |  |
+## 2) Key Electrical Specs
 
-## Verification Plan (Checklist)
-- [ ] PVT corners (SS/TT/FF/SF/FS)
-- [ ] Temperature sweep
-- [ ] Monte Carlo / mismatch
-- [ ] Post-layout PEX vs schematic
+| Parameter | Min | Typ | Max | Notes |
+|---|---:|---:|---:|---|
+| Gain (dB) |  |  |  |  |
+| Bandwidth (Hz) |  |  |  |  |
+| Phase Margin (deg) |  |  |  |  |
+| Input-referred noise |  |  |  |  |
+| Output swing |  |  |  |  |
+| Quiescent current |  |  |  |  |
+
+## 3) Verification Notes
+- Corner set: <SS/FF/SF/FS + temps>
+- Monte Carlo: <N samples + target yield>
+- Post-layout: <PEX method + deltas>
+
+## 4) Status
+- Last updated: <date>
+- Owner: <name>

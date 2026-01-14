@@ -1,7 +1,16 @@
-# Pinout (Template)
+# Pinout
 
-This document is derived from `admin/pinout_definition.csv`.
+This file should match `admin/pinout_definition.csv` (single source of truth).
+
+## Pin Table
+
+| Pin | Type | Direction | Domain | Description | Notes |
+|---|---|---|---|---|---|
+| VDD | power | in | 1V2 | main supply |  |
+| VSS | ground | in | gnd | ground |  |
+| IN  | signal | in | core | input |  |
+| OUT | signal | out | core | output |  |
 
 ## Notes
-- Keep `admin/pinout_definition.csv` as the **single source of truth**.
-- For tapeout releases, copy the final CSV + this pinout doc into `tapeout/delivery/docs/`.
+- Keep this file consistent with the CSV.
+- For tapeout, copy this file into `tapeout/delivery/docs/`.

@@ -1,0 +1,8 @@
+# Xschem RC (repo-local)
+#
+# Configure symbol/library paths here to avoid user-specific dotfiles.
+#
+# If you use a PDK, you can point Xschem to its symbol libraries.
+# Examples are installation-dependent, so keep them commented and document your setup.
+#
+# Use `docs/PDK_SETUP.md` to map PDK -> tool configs.

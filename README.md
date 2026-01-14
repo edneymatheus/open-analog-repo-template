@@ -17,13 +17,13 @@ Most open-source analog tapeout projects fail at **integration and reproducibili
 - Committing massive binary files (`.raw`, intermediate `.gds`, extraction leftovers) to Git  
 - Hardcoded paths that break simulations across machines  
 - Mixing testbenches with layout implementation and verification logs  
-- Having no clear "Definition of Done" before packaging a tapeout candidate
+- No clear “Definition of Done” before packaging a tapeout candidate
 
-**This template solves this by enforcing:**
-1. **Hierarchy:** Clear separation between `ip/` (design), `sim/` (functional verification), and `verify/` (physical verification).
-2. **Git Hygiene:** A battle-tested `.gitignore` that blocks temporary EDA files while preserving critical configs and documentation.
-3. **Environment as Code:** Centralized `env/` scripts and RC files to handle PDK paths and tool configuration.
-4. **Tapeout Packaging:** A versioned `tapeout/delivery/` folder designed to store **only final, review-ready** deliverables.
+**This template enforces:**
+1. **Hierarchy:** `ip/` (design) vs `sim/` (functional verification) vs `verify/` (physical verification)
+2. **Git Hygiene:** `.gitignore` blocks temporary EDA outputs while preserving configs/docs
+3. **Environment as Code:** `env/` centralizes tool configs and PDK selection
+4. **Release Discipline:** `tapeout/delivery/` is the only tracked, review-ready deliverable set
 
 ---
 
@@ -33,7 +33,7 @@ Most open-source analog tapeout projects fail at **integration and reproducibili
 open-analog-repo/
 ├── admin/            # Project management (schedules, pinouts, risks)
 ├── artifacts/        # [IGNORED] Intermediate build files (netlists, logs, temp GDS)
-├── docs/             # Live documentation (specifications, test plan, datasheet)
+├── docs/             # Live documentation (specifications, test plan, release discipline)
 ├── env/              # Tool configuration (.magicrc, .xschemrc, .spiceinit, env.sh)
 ├── ip/               # Design Source Code (The "Truth")
 │   ├── common/       #   -> Basic cells (inverters, mirrors)
@@ -43,14 +43,14 @@ open-analog-repo/
 │   ├── tb/           #   -> Testbenches (.spice, .sch)
 │   ├── run/          #   -> Run scripts / helpers
 │   └── results/      #   -> [IGNORED] Simulation waveforms & logs (.raw, .log)
-├── verify/            # Physical Verification (DRC, LVS, PEX)
-│   ├── drc/
-│   ├── lvs/
-│   ├── pex/
+├── verify/           # Physical Verification (DRC, LVS, PEX)
+│   ├── run/          #   -> Entry-point scripts (stubs)
 │   └── reports/      #   -> [IGNORED] Intermediate verification logs
 └── tapeout/          # Versioned Delivery Packages (GDS + Reports + Docs)
     └── delivery/
 ```
+
+---
 
 ## ✅ Definition of Done (DoD)
 
@@ -61,7 +61,7 @@ A block is considered **tapeout-ready** when:
 - [ ] `docs/specifications.md` contains Min/Typ/Max targets
 - [ ] Final GDS is placed in `tapeout/delivery/gds/`
 - [ ] Final DRC/LVS/PEX reports are placed in `tapeout/delivery/reports/`
-- [ ] `docs/pinout.md` (or equivalent) is included in `tapeout/delivery/docs/`
+- [ ] Pinout + specs are included in `tapeout/delivery/docs/`
 
 ---
 
@@ -71,30 +71,17 @@ You don't need a PDK installed to test this template. It includes a generic "Hel
 
 ### 1) Initialize the Environment
 
-This sets `PROJECT_ROOT` and enables clean relative paths.
-
 ```bash
 source env/env.sh
 ```
 
-## 2) Run the "Smoke Test"
-
-This command:
-
-1. Finds the inverter netlist in `ip/common/`
-2. Runs a transient simulation using `sim/tb/tb_smoke.spice`
-3. Checks the output and prints a PASS/FAIL message
+### 2) Run the "Smoke Test"
 
 ```bash
 make smoke
 ```
 
-**Expected output:**
-```text
-🚀 Starting Smoke Test...
-✅ TEST PASS: Inverter is switching! Delay = 5.23e-11
-✅ Smoke Test Finished. Results in sim/results/smoke_test.raw
-```
+---
 
 ## 🛠️ Workflow Guide
 
@@ -110,6 +97,8 @@ Run from the project root using the `Makefile` or scripts in `sim/run/` to ensur
 1. Open `env/env.sh`
 2. Set `PDK_ROOT` and `PDK` (example: `sky130A` or `ihp_sg13g2`)
 3. Update `.spiceinit` and `.magicrc` in `env/` to point to the correct model/libs
+
+**PDK Bridge:** see `docs/PDK_SETUP.md` for the step-by-step mapping per tool.
 
 ---
 
@@ -127,6 +116,8 @@ Only final, review-ready deliverables go into `tapeout/delivery/` (tracked by Gi
 
 This folder acts as your release candidate and is the only place where "final" artifacts should live.
 
+**Release Discipline:** see `docs/RELEASE_DISCIPLINE.md`.
+
 ---
 
 ## 📄 License
@@ -135,4 +126,3 @@ This template is open-source under the MIT License.
 Feel free to use it for academic, hobbyist, or commercial tapeouts.
 
 **Maintained by:** Édney Freitas — *Open Analog Survival Kit*
-

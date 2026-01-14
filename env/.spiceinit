@@ -1,0 +1,16 @@
+.control
+* Ngspice init (repo-local)
+* Keep global includes and options here for reproducibility.
+
+* If using a real PDK, include your model files here.
+* Examples (adjust to YOUR installation):
+*   Sky130:
+*     .include ${PDK_ROOT}/${PDK}/libs.tech/ngspice/sky130.lib.spice
+*
+*   IHP SG13G2:
+*     .include ${PDK_ROOT}/${PDK}/models/sg13g2.lib
+
+* Recommended options (optional):
+* set filetype=ascii
+* set noaskquit
+.endc

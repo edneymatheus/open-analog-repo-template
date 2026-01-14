@@ -1,0 +1,14 @@
+# Magic RC (repo-local)
+#
+# This file is intentionally minimal. The goal is to keep the PDK mapping explicit.
+#
+# If you set PDK_ROOT and PDK in `env/env.sh`, you can load your PDK tech here.
+#
+# Examples (adjust to YOUR installation):
+#   # Sky130:
+#   # tech load ${PDK_ROOT}/${PDK}/libs.tech/magic/sky130A.tech
+#
+#   # IHP SG13G2:
+#   # tech load ${PDK_ROOT}/${PDK}/libs.tech/magic/sg13g2.tech
+#
+# Tip: keep this file under version control so collaborators get the same setup.

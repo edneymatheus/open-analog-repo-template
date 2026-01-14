@@ -1,11 +1,8 @@
 * IP Block: Generic Inverter (Hello World)
-* Path: ip/common/my_inverter.spice
-*
-* This is a technology-agnostic inverter subcircuit used only to validate
-* that the repository structure + simulation plumbing is working.
-* Replace it with PDK devices when you move to Sky130/IHP SG13G2.
+* path: ip/common/my_inverter.spice
 
 .subckt my_inverter in out vdd gnd
-M1 out in vdd vdd pmos w=2u l=0.5u
-M2 out in gnd gnd nmos w=1u l=0.5u
+    Generic Ngspice model (level 1)
+    M1 out in vdd vdd pmos w=2u l=0.5u
+    M2 out in gnd gnd nmos w=1u l=0.5u
 .ends my_inverter

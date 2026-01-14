@@ -1,26 +1,54 @@
-# Tapeout Delivery Manifest
+\# Tapeout Delivery Manifest
 
-This folder contains the **versioned release candidates** for the chip.
+
+
+This folder contains the \*\*versioned release candidates\*\* for the chip.
 
 Only files that satisfy the Definition of Done (DoD) should be committed here.
 
-## 📦 Directory Structure
 
-- `delivery/gds/` -> Final, DRC-clean GDSII file (e.g., `top_level_v1.0.gds`)
-- `delivery/reports/` -> Final verification summaries (DRC/LVS/PEX)
-- `delivery/docs/` -> Pinout + specifications + any test notes
 
-## ✅ Release Checklist (before tagging)
+\## 📦 Directory Structure
 
-- [ ] Final GDS exists in `delivery/gds/`
-- [ ] DRC summary shows **0 violations** (or documented waivers)
-- [ ] LVS summary shows **netlist match**
-- [ ] Antenna checks passed (if applicable)
-- [ ] `admin/pinout_definition.csv` matches GDS labels
-- [ ] `docs/specifications.md` is complete (Min/Typ/Max targets)
 
-## Naming Suggestions
 
-- GDS: `chipname_top_vX.Y.gds`
-- Reports: `drc_vX.Y.txt`, `lvs_vX.Y.txt`, `pex_vX.Y.txt`
-- Tag: `vX.Y` (matches the delivery contents)
+\* `delivery/gds/` -> The final, DRC-clean GDSII file (e.g., `top\_level\_v1.0.gds`).
+
+\* `delivery/netlist/` -> CDL/Spice netlist for LVS check.
+
+\* `delivery/reports/` -> Final sign-off reports (DRC/LVS/PEX summary).
+
+\* `delivery/docs/` -> Datasheet and Pinout map.
+
+
+
+\## ✅ Release Checklist
+
+
+
+Before tagging a release commit, verify:
+
+
+
+\- \[ ] GDS file matches the commit hash of the `ip/` folder.
+
+\- \[ ] DRC Report shows \*\*0 Violations\*\* (or waived).
+
+\- \[ ] LVS Report shows \*\*Netlist Match\*\*.
+
+\- \[ ] Antenna Checks passed.
+
+\- \[ ] Pinout CSV matches the GDS labels.
+
+
+
+---
+
+## Release Discipline
+
+This repository treats `tapeout/delivery/` as the **only** review-ready location.
+
+- Intermediate outputs belong in `artifacts/` (ignored)
+- Final GDS + reports + docs belong in `tapeout/delivery/` (tracked)
+
+See: `docs/RELEASE_DISCIPLINE.md`
