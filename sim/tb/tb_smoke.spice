@@ -1,42 +1,44 @@
 * Testbench: Smoke Test (Inverter)
 * Path: sim/tb/tb_smoke.spice
+*
+* Goal: prove that a fresh clone can run ngspice from the repo root
+* and write results into sim/results/ (ignored by git).
 
-* 1. Includes (Navigating the hierarchy)
-.include ../../ip/common/my_inverter.spice
+.include "../../ip/common/my_inverter.spice"
 
-2. Parameters and Models
+* Generic Level-1 MOS models (technology-agnostic)
 .model nmos nmos level=1
 .model pmos pmos level=1
+
 .param VDD_VAL=1.8
 
-* 3. Test Netlist
-Vsupply vdd 0 DC {VDD_VAL}
-Vin     in  0 PULSE(0 {VDD_VAL} 1n 100p 100p 10n 20n)
+VDD  vdd 0 {VDD_VAL}
+VIN  in  0 PULSE(0 {VDD_VAL} 1n 100p 100p 10n 20n)
 
-* Inverter Instance (DUT)
-X1 in out vdd 0 my_inverter
+XINV in out vdd 0 my_inverter
+CLOAD out 0 10f
 
-* 4. Simulation Commands
+.tran 50p 40n
+
 .control
-    * Saves the results to the correct folder (cleanup)
-    set wr_vecnames
-    set wr_singlescale
-    
-    tran 10p 40n
-    
-    echo "Simulation completed. Checking results..."
-    
-    * Automatic measurement (Pass/Fail check)
-    meas tran t_delay trig v(in) val=0.9 rise=1 targ v(out) val=0.9 fall=1
-    
-    if t_delay > 0
-        echo "✅ TEST PASS: Inverter is switching! Delay =" $&t_delay
-    else
-        echo "❌ TEST FAIL: Inverter output stuck."
-    end
+  set filetype=ascii
+  run
 
-    * Writes the raw file to the results folder (not the root directory!)
-    write ../results/smoke_test.raw v(in) v(out)
+  * Simple functional checks
+  meas tran vout_max MAX v(out)
+  meas tran vout_min MIN v(out)
+
+  echo "Measured v(out):"
+  print vout_max vout_min
+
+  if (vout_max > 0.9*VDD_VAL) && (vout_min < 0.1*VDD_VAL)
+    echo "TEST PASS: Inverter is switching!"
+  else
+    echo "TEST FAIL: Output did not swing rail-to-rail."
+  end
+
+  write "../results/smoke_test.raw" v(in) v(out)
+  quit
 .endc
 
 .end
