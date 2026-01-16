@@ -1,42 +1,68 @@
 * Testbench: Smoke Test (Inverter)
 * Path: sim/tb/tb_smoke.spice
 
-* 1. Includes (Navigating the hierarchy)
-.include ../../ip/common/my_inverter.spice
+* 1. Includes (from repo root; robust to CWD)
+.include ip/common/my_inverter.spice
 
-2. Parameters and Models
-.model nmos nmos level=1
-.model pmos pmos level=1
+* 2. Parameters
 .param VDD_VAL=1.8
 
-* 3. Test Netlist
+* 3. Stimulus and DUT
 Vsupply vdd 0 DC {VDD_VAL}
-Vin     in  0 PULSE(0 {VDD_VAL} 1n 100p 100p 10n 20n)
+
+* PULSE(V1 V2 TD TR TF TON PERIOD)
+Vin in 0 PULSE(0 {VDD_VAL} 1n 100p 100p 10n 20n)
 
 * Inverter Instance (DUT)
 X1 in out vdd 0 my_inverter
 
 * 4. Simulation Commands
 .control
-    * Saves the results to the correct folder (cleanup)
     set wr_vecnames
     set wr_singlescale
-    
+
     tran 10p 40n
-    
+
     echo "Simulation completed. Checking results..."
-    
-    * Automatic measurement (Pass/Fail check)
-    meas tran t_delay trig v(in) val=0.9 rise=1 targ v(out) val=0.9 fall=1
-    
-    if t_delay > 0
-        echo "✅ TEST PASS: Inverter is switching! Delay =" $&t_delay
-    else
-        echo "❌ TEST FAIL: Inverter output stuck."
+
+    * Measure VDD from node to compute thresholds robustly
+    meas tran vdd_meas  FIND v(vdd)  AT=0.5n
+    let vih = 0.7 * vdd_meas
+    let vil = 0.3 * vdd_meas
+
+    * Level checks at fixed times (robust smoke test)
+    meas tran vout_pre  FIND v(out) AT=0.5n
+    meas tran vout_high FIND v(out) AT=3n
+    meas tran vout_post FIND v(out) AT=14n
+
+    echo "Measured: vdd=" $&vdd_meas " vout_pre=" $&vout_pre " vout_high=" $&vout_high " vout_post=" $&vout_post
+    echo "Thresholds: vih=" $&vih " vil=" $&vil
+
+    * Always write raw for debugging
+    write sim/results/smoke_test.raw v(in) v(out) v(vdd)
+
+    * Pass/Fail logic without && (ngspice-safe)
+    let pass = 1
+
+    if (vout_pre < vih)
+        let pass = 0
     end
 
-    * Writes the raw file to the results folder (not the root directory!)
-    write ../results/smoke_test.raw v(in) v(out)
+    if (vout_high > vil)
+        let pass = 0
+    end
+
+    if (vout_post < vih)
+        let pass = 0
+    end
+
+    if (pass)
+        echo "✅ TEST PASS: Inverter switches correctly."
+        quit 0
+    else
+        echo "❌ TEST FAIL: Unexpected inverter levels."
+        quit 1
+    end
 .endc
 
 .end
